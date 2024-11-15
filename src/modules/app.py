@@ -30,6 +30,8 @@ def main():
     # leerParrafo(bodyParagraphText)
 
 
+def prueba():
+    return 0
 
 def extraerLinkDeArgumentos():
     if len(sys.argv) != 2:
