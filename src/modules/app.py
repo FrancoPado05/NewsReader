@@ -1,5 +1,5 @@
 import sys
-# import pyttsx3
+import pyttsx3
 import requests
 from bs4 import BeautifulSoup
 
@@ -14,16 +14,18 @@ def main():
     soup = BeautifulSoup(content, 'lxml')
 
     title = soup.find('h1', class_='article-headline left').get_text()
+    subtitle = soup.find('h2', class_='article-subheadline left').get_text()
+    bodyParagraph = soup.find_all('p', class_='paragraph')
+
+    bodyParagraphText = f'{title}.{subtitle}.'
+    for paragraph in bodyParagraph:
+        bodyParagraphText += f' {paragraph.get_text()}'
+    
 
     if not comandosDeMySQLEstaEnLaBaseDeDatos(title):
-        subtitle = soup.find('h2', class_='article-subheadline left').get_text()
-        bodyParagraph = soup.find_all('p', class_='paragraph')
-
-        bodyParagraphText = f'{title}.{subtitle}.'
-        for paragraph in bodyParagraph:
-            bodyParagraphText += f' {paragraph.get_text()}'
-    
         guardarDatosEnBaseDeDatos(title, link)
+    return bodyParagraphText
+        
 
     # leerParrafo(bodyParagraphText)
 
@@ -69,7 +71,7 @@ def crearTablaSiNoExiste(cursor):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS enlaces (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            titulo VARCHAR(255) NOT NULL,
+            title VARCHAR(255) NOT NULL,
             link TEXT NOT NULL
         )
     """)
@@ -80,7 +82,7 @@ def comandosDeMySQLGuardarEnBaseDeDatos(cursor, title, link):
     cursor.execute("USE news_links")
 
     # Insertar datos en la tabla
-    cursor.execute("INSERT INTO enlaces (titulo, link) VALUES (%s, %s)", (title, link))
+    cursor.execute("INSERT INTO enlaces (title, link) VALUES (%s, %s)", (title, link))
 
 def comandosDeMySQLEstaEnLaBaseDeDatos(title):
     conexion = mysql.connector.connect(
@@ -93,16 +95,12 @@ def comandosDeMySQLEstaEnLaBaseDeDatos(title):
 
     crearTablaSiNoExiste(cursor)
 
-    cursor.execute('SELECT * FROM enlaces')
+    cursor.execute('SELECT * FROM enlaces WHERE title = %s', (title,))
 
-    enlacesBD = cursor.fetchall()
-
-    for _, titleFromBD, _ in enlacesBD:
-        if titleFromBD == title:
-            cursor.close()
-            conexion.close()
-            return True
-    return False
+    filaEncontrada = cursor.fetchall()
+    if not filaEncontrada:
+        return False
+    return True
 
         
 
