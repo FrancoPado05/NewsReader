@@ -9,8 +9,18 @@
 <body>
     <form id="link-input-container" action="">
         <label for="link-input">Enlace: </label>
-        <input type="text" id="link-input" placeholder="https://www.infobae.com/..."><button type="submit">Submit</button>
+        <input type="text" id="link-input" placeholder="https://www.infobae.com/..."><button type="submit" id="buttonForm">Submit</button>
     </form>
+    <div id="lecture-control">
+        <button id="button-pause-resume">Pause</button>
+        <button id="button-cancel">Cancel</button>
+    </div>
+    <h4 class="titulo-control">Velocidad de lectura</h4>
+    <div id="speed-control">
+        <button id="button-aumentar-speed" class="boton-pequenio">+</button>
+        <button id="button-decrementar-speed" class="boton-pequenio">-</button>
+    </div>
+    <p id="resultado">Aqui estara el texto de la noticia</p>
     <script src="../scripts/script.js"></script>
 </body>
 </html>

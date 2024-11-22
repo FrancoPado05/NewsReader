@@ -1,46 +1,50 @@
 import sys
-import pyttsx3
 import requests
 from bs4 import BeautifulSoup
 
 import mysql.connector
 import os
 
-def main():
-    link = extraerLinkDeArgumentos()
-    result = requests.get(link)
-    content = result.text
+from flask import Flask, request, jsonify
+import requests
+from bs4 import BeautifulSoup
 
-    soup = BeautifulSoup(content, 'lxml')
+from flask_cors import CORS
 
-    title = soup.find('h1', class_='article-headline left').get_text()
-    subtitle = soup.find('h2', class_='article-subheadline left').get_text()
-    bodyParagraph = soup.find_all('p', class_='paragraph')
+app = Flask(__name__)
+CORS(app)
 
-    bodyParagraphText = f'{title}.{subtitle}.'
-    for paragraph in bodyParagraph:
-        bodyParagraphText += f' {paragraph.get_text()}'
-    
+@app.route('/scrapear', methods=['POST'])
 
-    if not comandosDeMySQLEstaEnLaBaseDeDatos(title):
-        guardarDatosEnBaseDeDatos(title, link)
-    return bodyParagraphText
+def scrapear():
+
+    data = request.json
+
+    link = data.get('link')
+    if not link:
+        return jsonify({'error': 'URL no proporcionada'}), 400 # 'error 500' significa Bad Request (Solicitud Incorrecta)
+
+    try:
+        result = requests.get(link)
+        content = result.text
+
+        soup = BeautifulSoup(content, 'lxml')
+
+        title = soup.find('h1', class_='article-headline left').get_text()
+        subtitle = soup.find('h2', class_='article-subheadline left').get_text()
+        bodyParagraph = soup.find_all('p', class_='paragraph')
+
+        bodyParagraphText = f'{title}.{subtitle}.'
+        for paragraph in bodyParagraph:
+            bodyParagraphText += f' {paragraph.get_text()}'
         
 
-    # leerParrafo(bodyParagraphText)
-
-
-def extraerLinkDeArgumentos():
-    if len(sys.argv) != 2:
-        sys.exit('newsReader.py link')
-    return sys.argv[1]
-
-# def leerParrafo(bodyParagraph):
-#     engine = pyttsx3.init()
-#     engine.setProperty('voice', 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0')
-#     engine.say(bodyParagraph)
-#     engine.runAndWait()
-
+        if not comandosDeMySQLEstaEnLaBaseDeDatos(title):
+            guardarDatosEnBaseDeDatos(title, link)
+        return jsonify({'cuerpo': bodyParagraphText})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500 # 'error 500' significa Internal Server Error
+    
 def guardarDatosEnBaseDeDatos(title, link):
     # Conexión a MySQL
     conexion = mysql.connector.connect(
@@ -101,11 +105,5 @@ def comandosDeMySQLEstaEnLaBaseDeDatos(title):
         return False
     return True
 
-        
-
-
-
-
-
 if __name__ == '__main__':
-    main()
+    app.run(debug=True, host='0.0.0.0', port=6000)
