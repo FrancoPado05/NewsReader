@@ -3,8 +3,6 @@ const resultado = document.getElementById('resultado')
 const linkInput = document.getElementById('link-input');
 const buttonPauseResume = document.getElementById('button-pause-resume');
 const buttonCancel = document.getElementById('button-cancel');
-// const buttonAumentarSpeed = document.getElementById('button-aumentar-speed');
-// const buttonDecrementarSpeed = document.getElementById('button-decrementar-speed');
 
 const readText = text => {
     const sintetizador = window.speechSynthesis;
@@ -14,7 +12,6 @@ const readText = text => {
         mensaje.lang = 'es-ES';
 
         mensaje.rate = 1;
-        mensaje.pitch = 1;
 
         sintetizador.speak(mensaje);
     } else {
@@ -30,18 +27,6 @@ const pauseResume = () => {
 }
 
 const cancel = () => speechSynthesis.cancel();
-
-const aumentarVelocidad = () => {
-    if (mensaje.rate < 10) {
-        mensaje.rate += 1
-    } 
-}
-
-const decrementarVelocidad = () => {
-    if (mensaje.rate > 1) {
-        mensaje.rate -= 1
-    } 
-}
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault(); 
@@ -81,6 +66,3 @@ buttonCancel.addEventListener('click', () => {
     cancel()
     resultado.textContent = ''
 })
-
-buttonAumentarSpeed.addEventListener('click', aumentarVelocidad)
-buttonDecrementarSpeed.addEventListener('click', decrementarVelocidad)
