@@ -34,14 +34,18 @@ def scrapear():
         subtitle = soup.find('h2', class_='article-subheadline left').get_text()
         bodyParagraph = soup.find_all('p', class_='paragraph')
 
-        bodyParagraphText = f'{title}.{subtitle}.'
+        bodyParagraphText = ''
         for paragraph in bodyParagraph:
             bodyParagraphText += f' {paragraph.get_text()}'
         
 
         if not comandosDeMySQLEstaEnLaBaseDeDatos(title):
             guardarDatosEnBaseDeDatos(title, link)
-        return jsonify({'cuerpo': bodyParagraphText})
+        return jsonify({
+            'titulo': title,
+            'subtitulo':subtitle,
+            'cuerpo': bodyParagraphText
+            })
     except Exception as e:
         return jsonify({'error': str(e)}), 500 # 'error 500' significa Internal Server Error
     
@@ -106,4 +110,4 @@ def comandosDeMySQLEstaEnLaBaseDeDatos(title):
     return True
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=6000)
+    app.run(debug=True, host='0.0.0.0', port=5000)

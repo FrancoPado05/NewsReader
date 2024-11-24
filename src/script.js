@@ -1,5 +1,7 @@
 const form = document.getElementById('link-input-container');
-const resultado = document.getElementById('resultado')
+const title = document.getElementById('title')
+const subtitle = document.getElementById('subtitle')
+const result = document.getElementById('resultado')
 const linkInput = document.getElementById('link-input');
 const buttonPauseResume = document.getElementById('button-pause-resume');
 const buttonCancel = document.getElementById('button-cancel');
@@ -33,7 +35,7 @@ form.addEventListener('submit', async (event) => {
 
     const link = linkInput.value;
 
-    resultado.textContent = 'Cargando...';
+    result.textContent = 'Cargando...';
 
     try {
         const response = await fetch('http://127.0.0.1:5000/scrapear', {
@@ -49,20 +51,25 @@ form.addEventListener('submit', async (event) => {
         }
 
         const data = await response.json()
-        resultado.textContent = data.cuerpo || 'No se encontro contenido'
+        title.textContent = data.titulo || 'No se encontro contenido'
+        subtitle.textContent = data.subtitulo || 'No se encontro contenido'        
+        result.textContent = data.cuerpo || 'No se encontro contenido'
 
     } 
     catch (error) {
-        resultado.textContent = `Error: ${error.message}`;
+        result.textContent = `Error: ${error.message}`;
     }
 
     linkInput.value = ''
 
-    readText(resultado.textContent)
+    const textToRead = `${title.textContent}. ${subtitle.textContent}. ${result.textContent}`
+    readText(textToRead)
 });
 
 buttonPauseResume.addEventListener('click', pauseResume)
 buttonCancel.addEventListener('click', () => {
     cancel()
-    resultado.textContent = ''
+    title.textContent = ''
+    subtitle.textContent = ''
+    result.textContent = ''
 })
