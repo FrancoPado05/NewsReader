@@ -5,17 +5,24 @@ const result = document.getElementById('resultado')
 const linkInput = document.getElementById('link-input');
 const buttonPauseResume = document.getElementById('button-pause-resume');
 const buttonCancel = document.getElementById('button-cancel');
+const aumentarVelocidad = document.getElementById('button-cancel');
+const disminuirVelocidad = document.getElementById('button-cancel');
+
+let rate = 1
 
 const readText = text => {
     const sintetizador = window.speechSynthesis;
-    
+    const textToRead = text.split(' ')
     if (sintetizador) {
-        const mensaje = new SpeechSynthesisUtterance(text);
-        mensaje.lang = 'es-ES';
-
-        mensaje.rate = 1;
-
-        sintetizador.speak(mensaje);
+        for (let i = 0; i < textToRead.length; i++) {
+            const elementToRead = textToRead[i];            
+            const mensaje = new SpeechSynthesisUtterance(elementToRead);
+            mensaje.lang = 'es-ES';
+    
+            mensaje.rate = rate;
+    
+            sintetizador.speak(mensaje);
+        }
     } else {
         console.log("La API SpeechSynthesis no está soportada en este navegador.");
     }
@@ -38,7 +45,7 @@ form.addEventListener('submit', async (event) => {
     result.textContent = 'Cargando...';
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/scrapear', {
+        const response = await fetch('http://192.168.1.8:5000/scrapear', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
