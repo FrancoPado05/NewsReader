@@ -1,10 +1,12 @@
 {
   "dependencies": {
+    "@sanity/client": "^0.147.3",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "mysql2": "^3.11.4"
+    "mysql2": "^3.11.4",
+    "serverless-http": "^3.2.0"
   }
 }
