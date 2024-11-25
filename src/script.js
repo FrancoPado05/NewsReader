@@ -12,18 +12,15 @@ let rate = 1
 
 const readText = text => {
     const sintetizador = window.speechSynthesis;
-    const textToRead = text.split(' ')
     if (sintetizador) {
-        for (let i = 0; i < textToRead.length; i++) {
-            const elementToRead = textToRead[i];            
-            const mensaje = new SpeechSynthesisUtterance(elementToRead);
-            mensaje.lang = 'es-ES';
+        const mensaje = new SpeechSynthesisUtterance(text);
+        mensaje.lang = 'es-ES';
     
-            mensaje.rate = rate;
+        mensaje.rate = rate;
     
-            sintetizador.speak(mensaje);
+        sintetizador.speak(mensaje);
         }
-    } else {
+    else {
         console.log("La API SpeechSynthesis no está soportada en este navegador.");
     }
 }
