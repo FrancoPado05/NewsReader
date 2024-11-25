@@ -42,7 +42,7 @@ form.addEventListener('submit', async (event) => {
     result.textContent = 'Cargando...';
 
     try {
-        const response = await fetch('http://192.168.1.8:5000/scrapear', {
+        const response = await fetch('https://newsreaderfp.netlify.app/.netlify/functions/scrapear', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
