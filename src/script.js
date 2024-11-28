@@ -5,10 +5,16 @@ const result = document.getElementById('resultado')
 const linkInput = document.getElementById('link-input');
 const buttonPauseResume = document.getElementById('button-pause-resume');
 const buttonCancel = document.getElementById('button-cancel');
-const aumentarVelocidad = document.getElementById('button-cancel');
-const disminuirVelocidad = document.getElementById('button-cancel');
+const buttonAumentarVelocidad = document.getElementById('button-aumentar-speed');
+const buttonDisminuirVelocidad = document.getElementById('button-decrementar-speed');
+
+const barraDeProgreso = document.getElementById('barra-de-velocidad');
+let currentWidth = parseInt(window.getComputedStyle(barraDeProgreso).width);
 
 let rate = 1
+let textToRead = ''
+
+
 
 const readText = text => {
     const sintetizador = window.speechSynthesis;
@@ -32,7 +38,10 @@ const pauseResume = () => {
       speechSynthesis.pause();
 }
 
-const cancel = () => speechSynthesis.cancel();
+const cancel = () => {
+   speechSynthesis.cancel()
+   textToRead = ''
+}
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault(); 
@@ -66,7 +75,7 @@ form.addEventListener('submit', async (event) => {
 
     linkInput.value = ''
 
-    const textToRead = `${title.textContent}. ${subtitle.textContent}. ${result.textContent}`
+    textToRead = `${title.textContent}. ${subtitle.textContent}. ${result.textContent}`
     readText(textToRead)
 });
 
@@ -76,4 +85,20 @@ buttonCancel.addEventListener('click', () => {
     title.textContent = ''
     subtitle.textContent = ''
     result.textContent = ''
+})
+
+buttonAumentarVelocidad.addEventListener('click', () => {
+    rate = Math.min(rate + 0.5, 10)
+    speechSynthesis.cancel()
+    readText(textToRead)
+    currentWidth = Math.min(currentWidth + 5, 100)
+    barraDeProgreso.style.width = `${currentWidth}%`
+})
+
+buttonDisminuirVelocidad.addEventListener('click', () => {
+    rate = Math.max(rate - 0.5, 0.5)
+    speechSynthesis.cancel()
+    readText(textToRead)
+    currentWidth = Math.max(currentWidth - 5, 5)
+    barraDeProgreso.style.width = `${currentWidth}%`
 })

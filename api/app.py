@@ -22,7 +22,7 @@ def scrapear():
 
     link = data.get('link')
     if not link:
-        return jsonify({'error': 'URL no proporcionada'}), 400 # 'error 500' significa Bad Request (Solicitud Incorrecta)
+        return jsonify({'error': 'URL no proporcionada'}), 400 # 'error 400' significa Bad Request (Solicitud Incorrecta)
 
     try:
         result = requests.get(link)

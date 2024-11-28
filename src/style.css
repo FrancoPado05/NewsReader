@@ -4,9 +4,8 @@
 
 button {
     margin-top: 5px;
-    height: 18px;
-    width: 100px;
     cursor: pointer;
+    display: inline-block;
 }
 
 p {
@@ -44,13 +43,37 @@ p {
     justify-content: center;
 }
 
+#contenedor-barra-de-velocidad {
+    display: flex;
+    width: 100px;
+    height: 10px;
+    margin: 10px auto;
+    border: 1px solid black;
+    align-items: center;
+}
+
+#barra-de-velocidad {
+    height: 7px;
+    margin-left: 1px;
+    margin-right: 0.5px;
+    background-color: aquamarine;
+}
+
 .boton-pequenio {
     width: 20px;
     height: 20px;
     margin: 0 5px;
     padding: 0;
+    border-radius: 100%;
+}
+.boton-mas{
+    padding-top: 1px;
 }
 
 .titulo-control {
     text-align: center;
+}
+
+.width-barra-de-velocidad{
+    width: 10%;
 }
