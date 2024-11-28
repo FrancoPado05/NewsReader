@@ -51,7 +51,7 @@ form.addEventListener('submit', async (event) => {
     result.textContent = 'Cargando...';
 
     try {
-        const response = await fetch('http://127.0.0.1:10000/scrapear', {
+        const response = await fetch('https://NewsReader.onrender.com/scrapear', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
