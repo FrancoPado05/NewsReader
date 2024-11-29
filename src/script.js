@@ -8,8 +8,14 @@ const buttonCancel = document.getElementById('button-cancel');
 const buttonAumentarVelocidad = document.getElementById('button-aumentar-speed');
 const buttonDisminuirVelocidad = document.getElementById('button-decrementar-speed');
 
+const numeroVelocidadActual = document.getElementById('numero-velocidad-actual')
 const barraDeProgreso = document.getElementById('barra-de-velocidad');
-let currentWidth = parseInt(window.getComputedStyle(barraDeProgreso).width);
+
+const diezPuntosPorcentualescurrentWidth = parseFloat(window.getComputedStyle(barraDeProgreso).width);
+const cienPuntosPorcentualescurrentWidth = diezPuntosPorcentualescurrentWidth * 10;
+
+let currentWidthReal = diezPuntosPorcentualescurrentWidth
+let currentWidthPorcentual = 10
 
 let rate = 1
 let textToRead = ''
@@ -51,13 +57,12 @@ form.addEventListener('submit', async (event) => {
     result.textContent = 'Cargando...';
 
     try {
-        const response = await fetch('https://NewsReader.onrender.com/scrapear', {
+        const response = await fetch('http://127.0.0.1:5000/scrapear', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ link }),
-            mode: 'no-cors'
+            body: JSON.stringify({ link })
         });
     
         if (!response.ok) {
@@ -89,17 +94,39 @@ buttonCancel.addEventListener('click', () => {
 })
 
 buttonAumentarVelocidad.addEventListener('click', () => {
-    rate = Math.min(rate + 0.5, 10)
+    rate = Math.min(rate + 1, 10)
     speechSynthesis.cancel()
     readText(textToRead)
-    currentWidth = Math.min(currentWidth + 5, 100)
-    barraDeProgreso.style.width = `${currentWidth}%`
+    if (currentWidthPorcentual === 5) {
+        rate = 1
+        currentWidthPorcentual = 10
+        numeroVelocidadActual.innerText = '1.0'
+        currentWidthReal = diezPuntosPorcentualescurrentWidth
+        barraDeProgreso.style.width = `${currentWidthReal}px`
+    }
+    else {
+        currentWidthPorcentual = Math.min(currentWidthPorcentual + 10, 100)
+        numeroVelocidadActual.innerText = `${currentWidthPorcentual / 10}`
+        currentWidthReal = Math.min(currentWidthReal + diezPuntosPorcentualescurrentWidth, cienPuntosPorcentualescurrentWidth)
+        barraDeProgreso.style.width = `${currentWidthReal}px`
+    }
 })
 
 buttonDisminuirVelocidad.addEventListener('click', () => {
-    rate = Math.max(rate - 0.5, 0.5)
+    rate = Math.max(rate - 1, 1)
     speechSynthesis.cancel()
     readText(textToRead)
-    currentWidth = Math.max(currentWidth - 5, 5)
-    barraDeProgreso.style.width = `${currentWidth}%`
+    if (currentWidthPorcentual === 10) {
+        rate = 0.5
+        currentWidthPorcentual = 5
+        numeroVelocidadActual.innerText = '0.5'
+        currentWidthReal = diezPuntosPorcentualescurrentWidth / 2
+        barraDeProgreso.style.width = `${currentWidthReal}px`
+    }
+    else {
+        currentWidthPorcentual = Math.max(currentWidthPorcentual - 10, 5)
+        numeroVelocidadActual.innerText = `${currentWidthPorcentual / 10}`        
+        currentWidthReal = Math.max(currentWidthReal - diezPuntosPorcentualescurrentWidth, diezPuntosPorcentualescurrentWidth / 2)
+        barraDeProgreso.style.width = `${currentWidthReal}px`
+    }
 })

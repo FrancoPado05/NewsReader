@@ -5,28 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_UNIQUE_KEY"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>News Reader</title>
 </head>
 <body>
-    <form id="link-input-container" action="">
-        <label for="link-input">Enlace: </label>
-        <input type="text" id="link-input" placeholder="https://www.infobae.com/..."><button type="submit" id="buttonForm">Play</button>
-    </form>
-    <div id="lecture-control">
-        <button id="button-pause-resume">Pause</button>
-        <button id="button-cancel">Cancel</button>
+    <div id="comandos">
+        <form id="link-input-container" action="">
+            <input type="text" id="link-input" placeholder="https://www.infobae.com/...">
+            <div id="botones1">
+                <button type="submit" id="buttonForm"><i class="fas fa-regular fa-play"></i>PLAY</button>
+                <button id="button-pause-resume"><i class="fas fa-regular fa-pause"></i>PAUSE</button>
+                <button id="button-cancel"><i class="fas fa-regular fa-cancel"></i>CANCEL</button>
+            </div>
+        </form>
+        <div id="speed-control">
+            <button id="button-decrementar-speed" class="boton-pequenio"><i class="fas fa-solid fa-minus"></i></button>
+            <div id="contenedor-barra-de-velocidad">
+                <div id="barra-de-velocidad">
+                    <p id="velocidad-actual">x<span id="numero-velocidad-actual">1.0</span></p>
+                </div>
+            </div>
+            <button id="button-aumentar-speed" class="boton-pequenio"><i class="fas fa-solid fa-plus"></i></button>
+        </div>
     </div>
-    <h4 class="titulo-control">Velocidad de lectura</h4>
-    <div id="speed-control">
-        <button id="button-aumentar-speed" class="boton-pequenio boton-mas">+</button>
-        <button id="button-decrementar-speed" class="boton-pequenio">-</button>
+    <div id="noticia">
+        <h1 id="title"></h1>
+        <h3 id="subtitle"></h3>
+        <p id="resultado"></p>
     </div>
-    <div id="contenedor-barra-de-velocidad">
-        <div id="barra-de-velocidad" class="width-barra-de-velocidad"></div>
-    </div>
-    <h1 id="title"></h1>
-    <h3 id="subtitle"></h3>
-    <p id="resultado"></p>
     <script src="script.js"></script>
 </body>
 </html>
