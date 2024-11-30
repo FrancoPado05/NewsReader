@@ -1,7 +1,7 @@
 const form = document.getElementById('link-input-container');
 const title = document.getElementById('title')
 const subtitle = document.getElementById('subtitle')
-const result = document.getElementById('resultado')
+const containerBodyParagraph = document.getElementById('container-body-paragraph')
 const linkInput = document.getElementById('link-input');
 const buttonPauseResume = document.getElementById('button-pause-resume');
 const buttonCancel = document.getElementById('button-cancel');
@@ -19,8 +19,6 @@ let currentWidthPorcentual = 10
 
 let rate = 1
 let textToRead = ''
-
-
 
 const readText = text => {
     const sintetizador = window.speechSynthesis;
@@ -54,9 +52,9 @@ form.addEventListener('submit', async (event) => {
 
     const link = linkInput.value;
 
-    result.textContent = 'Cargando...';
-
+    containerBodyParagraph.innerHTML = '<p class="body-paragraph">Cargando...</p>';
     try {
+        speechSynthesis.cancel()
         const response = await fetch('http://127.0.0.1:5000/scrapear', {
             method: 'POST',
             headers: {
@@ -64,24 +62,30 @@ form.addEventListener('submit', async (event) => {
             },
             body: JSON.stringify({ link })
         });
-    
+        
         if (!response.ok) {
+            textBodyParagraph = ''
             throw new Error('Error en el scrapping');
         }
-
+        
         const data = await response.json()
-        title.textContent = data.titulo || 'No se encontro contenido'
-        subtitle.textContent = data.subtitulo || 'No se encontro contenido'        
-        result.textContent = data.cuerpo || 'No se encontro contenido'
+        title.textContent = data.titulo || 'No se encontro el titulo'
+        subtitle.textContent = data.subtitulo || 'No se encontro el subtitulo'
+        textBodyParagraph = ''
+        containerBodyParagraph.innerHTML = '';
+        for (const paragraph of data.cuerpo) {
+            containerBodyParagraph.innerHTML += `<p class="body-paragraph">${paragraph}</p>` || 'No se encontro esta parte del cuerpo'
+            textBodyParagraph += ` ${paragraph}`
+        }
+        
 
     } 
     catch (error) {
-        result.textContent = `Error: ${error.message}`;
+        containerBodyParagraph.innerHTML = `<p class="body-paragraph">${error.message}</p>`;
     }
-
+    
     linkInput.value = ''
-
-    textToRead = `${title.textContent}. ${subtitle.textContent}. ${result.textContent}`
+    textToRead = `${title.textContent}. ${subtitle.textContent}. ${textBodyParagraph}`
     readText(textToRead)
 });
 
@@ -90,7 +94,7 @@ buttonCancel.addEventListener('click', () => {
     cancel()
     title.textContent = ''
     subtitle.textContent = ''
-    result.textContent = ''
+    containerBodyParagraph.innerHTML = ''
 })
 
 buttonAumentarVelocidad.addEventListener('click', () => {

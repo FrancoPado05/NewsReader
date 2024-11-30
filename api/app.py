@@ -33,9 +33,9 @@ def scrapear():
         subtitle = soup.find('h2', class_='article-subheadline left').get_text()
         bodyParagraph = soup.find_all('p', class_='paragraph')
 
-        bodyParagraphText = ''
+        bodyParagraphText = []
         for paragraph in bodyParagraph:
-            bodyParagraphText += f' {paragraph.get_text()}'
+            bodyParagraphText.append(paragraph.get_text())
         
 
         if not comandosDeMySQLEstaEnLaBaseDeDatos(title):
