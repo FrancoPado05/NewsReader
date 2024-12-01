@@ -12,6 +12,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}})
 
 @app.route('/scrapear', methods=['POST'])
 

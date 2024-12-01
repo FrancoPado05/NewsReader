@@ -51,11 +51,11 @@ form.addEventListener('submit', async (event) => {
     event.preventDefault(); 
 
     const link = linkInput.value;
-
+    let textBodyParagraph = ''
     containerBodyParagraph.innerHTML = '<p class="body-paragraph">Cargando...</p>';
     try {
         speechSynthesis.cancel()
-        const response = await fetch('http://127.0.0.1:5000/scrapear', {
+        const response = await fetch('https://newsreader-1.onrender.com', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
