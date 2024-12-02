@@ -4,6 +4,7 @@ const subtitle = document.getElementById('subtitle')
 const containerBodyParagraph = document.getElementById('container-body-paragraph')
 const linkInput = document.getElementById('link-input');
 const buttonPauseResume = document.getElementById('button-pause-resume');
+const buttonPauseResumeText = document.getElementById('button-pause-resume-text');
 const buttonCancel = document.getElementById('button-cancel');
 const buttonAumentarVelocidad = document.getElementById('button-aumentar-speed');
 const buttonDisminuirVelocidad = document.getElementById('button-decrementar-speed');
@@ -38,11 +39,11 @@ const readText = text => {
 const pauseResume = () => {
     if (speechSynthesis.paused) {
         speechSynthesis.resume();
-        buttonPauseResume.innerText = 'PAUSE'
+        buttonPauseResumeText.innerText = 'PAUSE'
     }
     else {
         speechSynthesis.pause();
-        buttonPauseResume.innerText = 'RESUME'
+        buttonPauseResumeText.innerText = 'RESUME'
     }
 }
 
