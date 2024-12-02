@@ -36,10 +36,14 @@ const readText = text => {
 }
 
 const pauseResume = () => {
-    if (speechSynthesis.paused)
-      speechSynthesis.resume();
-    else
-      speechSynthesis.pause();
+    if (speechSynthesis.paused) {
+        speechSynthesis.resume();
+        buttonPauseResume.innerText = 'PAUSE'
+    }
+    else {
+        speechSynthesis.pause();
+        buttonPauseResume.innerText = 'RESUME'
+    }
 }
 
 const cancel = () => {
