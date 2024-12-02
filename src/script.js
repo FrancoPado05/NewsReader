@@ -55,7 +55,7 @@ form.addEventListener('submit', async (event) => {
     containerBodyParagraph.innerHTML = '<p class="body-paragraph">Cargando...</p>';
     try {
         speechSynthesis.cancel()
-        const response = await fetch('https://newsreader-1.onrender.com', {
+        const response = await fetch('https://newsreader-1.onrender.com/scrapear', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
