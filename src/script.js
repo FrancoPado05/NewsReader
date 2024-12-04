@@ -3,9 +3,12 @@ const title = document.getElementById('title')
 const subtitle = document.getElementById('subtitle')
 const containerBodyParagraph = document.getElementById('container-body-paragraph')
 const linkInput = document.getElementById('link-input');
+
 const buttonPauseResume = document.getElementById('button-pause-resume');
 const buttonPauseResumeText = document.getElementById('button-pause-resume-text');
 const buttonCancel = document.getElementById('button-cancel');
+const femaleButton = document.getElementById('female-button');
+const maleButton = document.getElementById('male-button');
 const buttonAumentarVelocidad = document.getElementById('button-aumentar-speed');
 const buttonDisminuirVelocidad = document.getElementById('button-decrementar-speed');
 
@@ -19,6 +22,7 @@ let currentWidthReal = diezPuntosPorcentualescurrentWidth
 let currentWidthPorcentual = 10
 
 let rate = 1
+let pitch = 0
 let textToRead = ''
 
 const readText = text => {
@@ -26,7 +30,8 @@ const readText = text => {
     if (sintetizador) {
         const mensaje = new SpeechSynthesisUtterance(text);
         mensaje.lang = 'es-ES';
-    
+        
+        mensaje.pitch = pitch
         mensaje.rate = rate;
     
         sintetizador.speak(mensaje);
@@ -50,6 +55,23 @@ const pauseResume = () => {
 const cancel = () => {
    speechSynthesis.cancel()
    textToRead = ''
+}
+
+const changeVoice = (newPitch) => {
+    pitch = newPitch
+    speechSynthesis.cancel()
+    readText(textToRead)
+}
+
+const handleChangeVoiceButtons = (newPitch, buttonApretado, buttonSinApretar) => {
+    changeVoice(newPitch)
+
+    buttonApretado.classList.add('boton-seleccionado-apretado')
+    buttonApretado.classList.remove('boton-seleccionado-sin-apretar')
+
+    buttonSinApretar.classList.remove('boton-seleccionado-apretado')
+    buttonSinApretar.classList.add('boton-seleccionado-sin-apretar')
+
 }
 
 form.addEventListener('submit', async (event) => {
@@ -101,6 +123,10 @@ buttonCancel.addEventListener('click', () => {
     subtitle.textContent = ''
     containerBodyParagraph.innerHTML = ''
 })
+
+femaleButton.addEventListener('click', () => { handleChangeVoiceButtons(2, femaleButton, maleButton) })
+
+maleButton.addEventListener('click', () => { handleChangeVoiceButtons(0, maleButton, femaleButton) })
 
 buttonAumentarVelocidad.addEventListener('click', () => {
     rate = Math.min(rate + 1, 10)
